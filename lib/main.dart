@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project3/local_storage/sp_helper.dart';
 import 'package:project3/local_storage/sp_screen_test.dart';
+import 'package:project3/local_storage/sql_helper.dart';
+import 'package:project3/local_storage/task_model.dart';
 import 'package:project3/my_provider.dart';
 import 'package:project3/provider_screen_test.dart';
 import 'package:project3/register_page.dart';
@@ -9,12 +11,13 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SpHelper.spHelper.initSharedPrefrences();
+  await SqlHelper.sqlHelper.initDatabase();
   runApp(ChangeNotifierProvider<MyProvider>(
     create: (context) {
       return MyProvider();
     },
     child: MaterialApp(
-      home: SplachScreen(),
+      home: HomeScreen(),
     ),
   ));
 }
@@ -64,7 +67,10 @@ class HomeScreen extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       body: Center(
-        child: Text('Home PAGE'),
+        child: RaisedButton(onPressed: () {
+          TaskModel taskModel = TaskModel('WATCHING TV', false);
+          SqlHelper.sqlHelper.getAllTasks();
+        }),
       ),
     );
   }
